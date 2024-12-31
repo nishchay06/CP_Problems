@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
-#include<bits/stdc++.h>
+// #include<bits/stdc++.h>
+#include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,59 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+    ll n,m,K;
+    cin >> n >> m >> K;
+    vvl a(n,vl(m));
+    For(n) Forj(m) cin >> a[i][j];
+    vl dp(m,INF);
+    vl ndp, cdp;
+    For(n) {
+        ndp = vl(m,INF);
+        // at row i
+        Forl(k,0,m) {
+            // after k shifts 
+            cdp = vl(m,INF);
+            // at col j
+                Forj(m) {
+                // additional cost in K*k
+                // element at pos j after k shifts => (j+k)%m
+                ll v = a[i][(j+k)%m];
+                cdp[j] = min(cdp[j],k*K+dp[j]+v);
+                if(j > 0) cdp[j] = min(cdp[j],cdp[j-1]+v);
+                ndp[j] = min(ndp[j],cdp[j]);
             }
-            dp[num] = ans;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        dp = ndp;
+    }
+    cout<<dp[m-1];nl
 }
+/*
+a b c d
+e f g h
+i j k l
+
+k        0       , 1         , 2          , 3
+f(0,0) = a       , k+b       , 2k+c       , 3k+d
+f(0,1) = a+b     , k+b+c     , 2k+c+d     , 3k+d+a
+f(0,2) = a+b+c   , k+b+c+d   , 2k+c+d+a   , 3k+d+a+b
+f(0,3) = a+b+c+d , k+b+c+d+a , 2k+c+d+a+b , 3k+d+a+b+c
+
+f(1,0) = 
+f(0,0)+a[0][1]
+
+b c a -> 1
+f d e -> 2
+g h i -> 0
+
+cost = 3 * k + [ mincost from b to i ]
+*/ 
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

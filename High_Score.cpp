@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,25 +77,48 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n,m;
+    cin >> n >> m;
+    vvl edges;
+    vvl al(n,vl());
+    vvl reval(n,vl()); 
+    For(m) {
+        ll u,w,v;
+        cin >> u >> v >> w;
+        u--, v--;
+        w = -w;
+        al[u].pus(v);
+        reval[v].pus(u);
+        edges.pus({u,v,w});
+    }
+    vl dist(n,INF);
+    auto dfs = [&](auto self, ll i, vl& vis, vvl& al)->void{
+        vis[i] = 1;
+        for(auto& ch : al[i]) {
+            if(!vis[ch]) self(self,ch,vis,al);
         }
-        return dp[num];
     };
-    cout << f(f,n); nl
+    vl vis(n);
+    vl vis1(n);
+    dfs(dfs,0,vis,al);
+    dfs(dfs,n-1,vis1,reval);
+    dist[0] = 0;
+    bool found = 0;
+    For(n) {
+        Forj(m) {
+            ll u = edges[j][0], v = edges[j][1], w = edges[j][2];
+            if(dist[u] != INF and dist[u]+w < dist[v]) {
+                if(i == n-1) {
+                    // cycle detected
+                    if(vis[u] && vis1[v]) found = 1;
+                }
+                dist[v] = dist[u]+w;
+            }
+        }
+    }
+    if(found) dist[n-1] = 1;
+    cout<<-dist[n-1];nl
 }
 
 int main(){

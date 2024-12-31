@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -57,7 +57,8 @@ using iset = tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node
  
 const int M = 1e9+7;
 // const int M = 998244353;
-const int N = 2e5+5;
+// const int N = 10;
+const int N = 1e5+1;
 const ld pi = 3.141592653589793238;
 const ll INF = 2e18;
  
@@ -77,30 +78,76 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
-void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+vl p;
+map<ll,ll> mf;
+map<ll,ll> cr;
+void prime() {
+    p[0] = p[1] = 0;
+    for(ll i = 2; i*i < N; i++) {
+        if(p[i]) {
+            for(ll j = i*i; j < N; j += i) {
+                p[j] = 0;
             }
-            dp[num] = ans;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+}
+
+void getPrime(ll n) {
+    for(ll i = 2; i*i <= n && n > 1; i++) {
+        ll cnt = 0;
+        while(p[i] && n%i == 0) {
+            n /= i;
+            cnt++;
+        }
+        mf[i] += cnt;
+    }
+    if(n > 1) mf[n] += 1;
+}
+
+void f(ll n) {
+    cr.clear();
+    cr = mf;
+    for(ll i = 2; i*i <= n; i++) {
+        if(p[i]) {
+            ll crcnt = 0;
+            while(n%i == 0) {
+                crcnt++;
+                n /= i;
+            }
+            cr[i] += crcnt;
+        }
+    }
+    if(n > 1) cr[n]++;
+    ll val = 1;
+    for(auto& [_,it] : cr) {
+        if(it) {
+            val *= it+1;
+            val %= M;
+        }
+    }
+    cout<<val<<" ";
+}
+
+void solve(){
+    ll n,m;
+    cin >> n >> m;
+    vl a(n);
+    inpt(a);
+    Forl(i,2,m+1) getPrime(i);
+    For(n) {
+        ll ai = a[i];
+        f(ai);
+    }
+    nl
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
+    p.resize(N,1);
+    mf.clear();
+    cr.clear();
+    prime();
     int t = 1;
     // cin >> t;
     while(t--){

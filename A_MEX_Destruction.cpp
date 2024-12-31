@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,51 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
     ll n;
     cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    vl a(n);
+    inpt(a);
+    // 1 <= n <= 50, 0 <= ai <= 100
+    bool oz = 1;
+    For(n) if(a[i] != 0) oz = 0;
+    if(oz) {
+        cout<<0;nl
+        done
+    }
+    bool nz = 1;
+    For(n) if(a[i] == 0) nz = 0;
+    if(nz) {
+        cout<<1;nl
+        done
+    }
+    ll cnt = 0;
+    ll i = 0;
+    bool nx = 0;
+    while(i < n){
+        while(i < n && a[i] == 0) {
+            nx = 0;
+            i++;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        while(i < n && a[i] != 0) {
+            nx = 1;
+            i++;
+        }
+        if(nx) cnt++;
+    }
+    // cout<<"divs: "<<cnt;nl
+    if(cnt == 1) {
+        cout<<1;nl
+        done
+    }
+    cout<<2;nl
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

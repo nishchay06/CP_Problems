@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,30 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
-        }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    ll n; cin >> n;
+    vl a(n);
+    inpt(a);
+    ll sm = Vsum(a);
+    if(sm%n != 0) {
+        na
+        done
+    }
+    // cout<<sm<<" "<<n;nl
+    ll sm1 = 0, sm2 = 0, c1 = 0, c2 = 0;
+    For(n) {
+        if(i&1) sm1 += a[i], c1 += 1;
+        else sm2 += a[i], c2 += 1;
+    }
+    if((sm1%c1 == 0 && sm1/c1 == sm/n) && (sm2%c2 == 0 && sm2/c2 == sm/n)) ya
+    else na
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

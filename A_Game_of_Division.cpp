@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,46 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+    ll n,k;
+    cin >> n >> k;
+    vl a(n);
+    inpt(a);
+    map<ll,ll> st;
+    For(n) st[a[i]]++;
+    For(n) {
+        // cout<<i<<" : "<<a[i];
+        bool pos = 1;
+        for(ll val = a[i]; val >= 1; val -= k) {
+            if(st.find(val) != st.end() && (val != a[i] || st[a[i]] > 1)) {
+                pos = 0;
+                break;
             }
-            dp[num] = ans;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        // cout<<" here 1 ";
+        if(!pos) continue;
+        // cout<<" here 2 ";
+        for(ll val = a[i]+k; val <= 100; val += k) {
+            if(st.find(val) != st.end() && (val != a[i] || st[a[i]] > 1)) {
+                pos = 0;
+                break;
+            }
+        }
+        // cout<<" here 3 ";
+        if(!pos) continue;
+        // cout<<" here 4 ";
+        ya
+        cout<<i+1;nl
+        done
+    }
+    na
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,26 +77,64 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+    ll n,m;
+    cin >> n >> m;
+    vl dist(n,INF);
+    vl dist1(n,INF);
+    vvl edges;
+    vector<vvl> al(n,vvl());
+    vector<vvl> reval(n,vvl());
+    For(m) {
+        ll u,v,w;
+        cin >> u >> v >> w;
+        u--, v--;
+        al[u].pus({v,w});
+        reval[v].pus({u,w});
+        edges.pus({u,v,w});
+    }
+    auto dijk = [&](ll st, vector<vvl>& al, vl& dist) -> void {
+        priority_queue<vl> q;
+        q.push({0,st});
+        while(sz(q)) {
+            auto cr = q.top();
+            q.pop();
+            ll crdist = -cr[0], crnode = cr[1];
+            if(crdist >= dist[crnode]) continue;
+            dist[crnode] = crdist;
+            for(auto& it : al[crnode]) {
+                ll nxtnode = it[0], nxtdist = it[1];
+                if(dist[nxtnode] > nxtdist + crdist) {
+                    q.push({-nxtdist-crdist,nxtnode});
+                }
             }
-            dp[num] = ans;
         }
-        return dp[num];
     };
-    cout << f(f,n); nl
+    dijk(0,al,dist);
+    dijk(n-1,reval,dist1);
+    ll ans = INF;
+    for(auto& it : edges) {
+        ll u = it[0], v = it[1], w = it[2];
+        ans = min(ans,dist[u] + w/2 + dist1[v]);
+    }
+    cout<<ans;nl
 }
+/*
+if this is the answer path, with 2 - 3  special edge 
+1 - ... - 2 - 3 - ... - 4
+
+Ans = D[1,2] + W(2,3) / 2 + D[3,4]
+
+So, for 1 , special edge u -> v with weight w, and N
+
+Ans = D[1,u] + w/2 + D[v,N]
+as D[v,N] = D[N,v] with reversed edges
+
+so, Ans = D[1,u] + w/2 + D'[N,v] with weight u->v = w
+
+thus, ans = Min { D[u] + w/2 + D'[v]} for all { u, v, w }
+
+*/ 
 
 int main(){
     ios_base::sync_with_stdio(0);

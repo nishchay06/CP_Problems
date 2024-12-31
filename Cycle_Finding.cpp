@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,25 +77,48 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+    ll n,m;
+    cin >> n >> m;
+    vvl edges;
+    For(m) {
+        ll u, v, w;
+        cin >> u >> v >> w;
+        u--, v--;
+        edges.pus({u,v,w});
+    }
+    vl dist(n);
+    vl par(n,-1);
+    ll st = -1;
+    For(n) {
+        // cout<<i<<" : ";nl
+        st = -1;
+        for(auto& it : edges) {
+            ll u = it[0], v = it[1], w = it[2];
+            // cout<<u<<","<<dist[u]<<" -> "<<v<<","<<dist[v]<<" => "<<w;nl
+            if(dist[u] + w  < dist[v]) {
+                dist[v] = dist[u]+w;
+                par[v] = u;
+                st = v;
             }
-            dp[num] = ans;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    // cout<<st<<endl;
+    if(st == -1) {
+        na
+    } else {
+        ya
+        For(n-1) st = par[st];
+        vl cycle = {st+1};
+        ll v = par[st];
+        while(v != st) {
+            cycle.pus(v+1);
+            v = par[v];
+        }
+        cycle.pus(st+1);
+        rev(cycle);
+        prt(cycle);
+    }
 }
 
 int main(){

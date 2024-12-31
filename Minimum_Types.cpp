@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -60,6 +60,7 @@ const int M = 1e9+7;
 const int N = 2e5+5;
 const ld pi = 3.141592653589793238;
 const ll INF = 2e18;
+const ll INF2 = 2e15;
  
 ll power(ll a,ll b){ll r=1; while(b) {if(b&1) r=(r*a)%M; a=(a*a)%M; b/=2;} return r;}
 vl sieve(ll n) {vl a(n+1,1),v; a[0]=a[1]=0; Forl(i,2,n+1) if(a[i]) {v.pus(i); for(ll j=i*i; j <=n; j+=i) a[j]=0;} return a;}
@@ -77,32 +78,31 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
-        }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    ll n,x;
+    cin >> n >> x;
+    vl a(n), b(n);
+    inpt(a);
+    inpt(b);
+    ll cnt = 0;
+    priority_queue<int> pq;
+    For(n) pq.push(a[i]*b[i]);
+    while(size(pq) && x > 0) {
+        int cr = pq.top();
+        pq.pop();
+        x -= cr;
+        cnt += 1;
+    }
+    if(x <= 0) cout<<cnt;
+    else cout<<-1;
+    nl
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,64 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n,m,q;
+    cin >> n >> m >> q;
+    vl a(q);
+    inpt(a);
+    vl ans;
+    vvl intervals;
+    intervals.pus({m,m});
+    For(q) {
+        ll crval = a[i];
+        vvl nintervals;
+        for(auto& it : intervals) {
+            ll l = it[0], r = it[1];
+            if(l <= crval && crval <= r) {
+                nintervals.push_back({1,1});
+                nintervals.push_back({n,n});
+                if(l != r) {
+                    nintervals.push_back({l,r});
+                }
+            } else if(crval < l) {
+                nintervals.push_back({l-1,r});
+            } else nintervals.push_back({l,r+1});
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        srt(nintervals);
+        vvl mergedintervals;
+        ll bg = nintervals[0][0], en = nintervals[0][1];
+        Forl(i,1,size(nintervals)) {
+            ll crbg = nintervals[i][0], cren = nintervals[i][1];
+            if(crbg <= en) {
+                en = max(en,cren);
+            } else {
+                mergedintervals.push_back({bg,en});
+                bg = crbg, en = cren;
+            }
+        }
+        mergedintervals.push_back({bg,en});
+        intervals = mergedintervals;
+        ll crans = 0;
+        for(auto& it : intervals) {
+            crans += it[1]-it[0]+1;
+        }
+        ans.push_back(crans);
+    }
+    prt(ans);
 }
+
+/*
+x x x x x j x x x x
+x x x x j j x x x x
+j x x x j j x x x j
+j j x p j j x x p j
+*/ 
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

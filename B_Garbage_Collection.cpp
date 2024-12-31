@@ -1,4 +1,3 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
 using namespace std;
  
@@ -54,6 +53,7 @@ using iset = tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node
 #define dbg(x)   cout << #x << " = " << x << endl;
 #define inpt(v)  For(sz(v)) cin >> v[i];
 #define prt(v)  {for(auto &x:v) cout << x << ' '; nl}
+#define prtln(v)  {for(auto &x:v) cout << x << '\n';}
  
 const int M = 1e9+7;
 // const int M = 998244353;
@@ -77,25 +77,28 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
+    ll n, q;
     cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
-        }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    vpl qr;
+    For(n){
+        ll q,r;
+        cin >> q >> r;
+        qr.pus({q,r});
+    }
+    cin >> q;
+    vl ans(q);
+    For(q) {
+        ll t,d;
+        cin >> t >> d;
+        t--;
+        ll q = qr[t].ff, r = qr[t].ss;
+        ll mod = d%q;
+        ll res = d+r-mod;
+        if(mod > r) res += q;
+        ans[i] = res;
+    }
+    prtln(ans);
 }
 
 int main(){
@@ -108,3 +111,16 @@ int main(){
     }
     return 0;
 }
+/*
+(d+q)%q == r
+
+for ex
+q = 7
+r = 4
+
+d%7 == 4
+
+now 2 options 3 and 5
+for 3 => 3%7 = 3 <= 4, so ans will be 3 + (4-3) i.e     d + (r - mod)
+for 5 => 5%7 = 5 >  4, so ans will be 5 + (7-(5-4)) i.e d + (q-(mod-r))
+*/ 

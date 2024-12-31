@@ -1,4 +1,3 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
 using namespace std;
  
@@ -77,34 +76,35 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
-void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
-        }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+void solve(vl& dp){
+    ll l,r;
+    cin >> l >> r;
+    ll ans = 0;
+    ans += dp[r];
+    ans -= dp[l-1];
+    ans += dp[l];
+    ans -= dp[l-1];
+    cout<<ans;nl
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
+    vl dp(2e5+1,1);
+    dp[0] = 0;
+    dp[2] = 1;
+    dp[3] = 2;
+    Forl(i,4,2e5+1) {
+        dp[i] = 1+dp[i/3];
+    }
+    Forl(i,2,2e5+1) {
+        dp[i] += dp[i-1];
+    }
+
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
-        solve();
+        solve(dp);
     }
     return 0;
 }

@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,67 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
     ll n;
     cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    vl a(n);
+    inpt(a);
+    int val = -1, ind = -1;
+    For(n) if(abs(a[i]) != 1) ind = i, val = a[i];
+    function<vl(ll,ll)> k1 = [&](ll l, ll r) -> vl {
+        ll mx = 0, mn = 0;
+        ll crmx = 0, crmn = 0;
+        Forl(i,l,r+1) {
+            crmx = max(a[i],crmx+a[i]);
+            crmn = min(a[i],crmn+a[i]);
+            mx = max(mx,crmx);
+            mn = min(mn,crmn);
         }
-        return dp[num];
+        return {mn,mx};
     };
-    cout << f(f,n); nl
+    if(ind == -1) {
+        vl cr = k1(0,n-1);
+        ll mn = cr[0], mx = cr[1];
+        cout<<mx-mn+1;nl
+        Forl(i,mn,mx+1) cout<<i<<" ";
+        nl
+    } else {
+        vl crb = k1(0,ind-1);
+        vl cra = k1(ind+1,n-1);
+        sll st;
+        Forl(i,crb[0],crb[1]+1) st.in(i);
+        Forl(i,cra[0],cra[1]+1) st.in(i);
+        ll sm = 0, mn1 = 0, mx1 = 0, mn2 = 0, mx2 = 0;
+        for(ll i = ind-1; i >= 0; i--) {
+            sm += a[i];
+            mx1 = max(sm,mx1);
+            mn1 = min(sm,mn1);
+        }
+        sm = 0;
+        Forl(i,ind+1,n) {
+            sm += a[i];
+            mx2 = max(sm,mx2);
+            mn2 = min(sm,mn2);
+        }
+
+        Forl(i,mn1+mn2,mx1+mx2+1) st.in(val+i);
+        cout<<sz(st);nl
+        prt(st);
+    }
 }
+/*
+
+-1 1 -1 -1 1 10 1 1 -1 -1 
+      ^           ^       = S
+
+*/ 
+
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

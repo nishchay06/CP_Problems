@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,25 +77,50 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+    ll n,m;
+    cin >> n >> m;
+    vvl adjl(n,vl());
+    For(m) {
+        ll u,v;
+        cin >> u >> v;
+        u--, v--;
+        adjl[u].pus(v);
+        adjl[v].pus(u);
+    }
+    bool found = 0;
+    vl vis(n);
+    function<void(ll,ll,vl&)> dfs = [&](ll cr, ll par, vl& path) {
+        if(found) return;
+        if(vis[cr]) {
+            if(sz(path) > 2) {
+                found = 1;
+                vl ans;
+                ans.push_back(cr+1);
+                for(ll j = sz(path)-1; j >= 0; j--) {
+                    ans.push_back(path[j]);
+                    if(path[j] == cr+1) break;
+                }
+                cout<<sz(ans);nl
+                prt(ans);
+                return;
             }
-            dp[num] = ans;
         }
-        return dp[num];
+        vis[cr] = 1;
+        path.push_back(cr+1);
+        for(auto& ch : adjl[cr]) {
+            if(ch == par) continue;
+            dfs(ch,cr,path);
+        }
+        path.pop_back();
     };
-    cout << f(f,n); nl
+    For(n) {
+        if(!vis[i]) {
+            vl path;
+            dfs(i,-1,path);
+        }
+    }
+    if(!found) cout<<"IMPOSSIBLE\n";
 }
 
 int main(){

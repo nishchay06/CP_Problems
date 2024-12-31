@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,72 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n,x,y;
+    cin >> n >> x >> y;
+    if(y-x == 1 || y-x == n-1) {
+        For(n/2) {
+            cout<<"0 1 ";
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        if(n&1) {
+            cout<<"2";
+        }
+        nl
+        done
+    }
+    vl b(n,-1);
+    x--, y--;
+    b[x] = 0, b[y] = 1;
+    bool cx = 1, cy = 0;
+    ll xx = x-1, yy = y+1;
+    if(xx == -1) xx = n-1;
+    if(yy == n) yy = 0;
+    Forl(d,1,n) {
+        // x-d, y+d
+        if(xx == yy) {
+            if(b[xx] == -1) b[xx] = 2;
+            break;
+        } else {
+            if(b[xx] == -1) b[xx] = cx;
+            if(b[yy] == -1) b[yy] = cy;
+        }
+        cx = !cx;
+        cy = !cy;
+        xx--;
+        yy++;
+        if(xx == -1) xx = n-1;
+        if(yy == n) yy = 0;
+        if(xx == y || yy == x) break;
+    }
+    xx = x+1, yy = y-1;
+    if(xx == n) xx = 0;
+    if(yy == -1) yy = n;
+    cx = 1, cy = 0;
+    Forl(d,1,n) {
+        // x+d, y-d
+        if(xx == yy) {
+            if(b[xx] == -1) b[xx] = 2;
+            break;
+        } else {
+            if(b[xx] == -1) b[xx] = cx;
+            if(b[yy] == -1) b[yy] = cy;
+        }
+        cx = !cx;
+        cy = !cy;
+        xx++;
+        yy--;
+        if(xx == n) xx = 0;
+        if(yy == -1) yy = n-1;
+        if(xx == y || yy == x) break;
+    }
+    prt(b)
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

@@ -1,4 +1,3 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
 using namespace std;
  
@@ -77,25 +76,28 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
+vl dir = {0,1,0,-1,0};
+ll cnt(vector<vector<char>>& grid, int i, int j, int k, vvl& vis) {
+    if(min(i,j) < 0 || i >= sz(vis) || j >= sz(vis[0])) return 0;
+    if(vis[i][j]) return 0;
+    if(grid[i][j] == '#') return 0;
+    if(k == 0) return 1;
+    ll ans = 0;
+    vis[i][j] = 1;
+    Forl(d,0,4) ans += cnt(grid,i+dir[d],j+dir[d+1],k-1,vis); 
+    vis[i][j] = 0;
+    return ans;
+}
+
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
-        }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    int n,m,k;
+    cin >> n >> m >> k;
+    vector<vector<char>> grid(n,vector<char>(m,'.'));
+    For(n) Forj(m) cin >> grid[i][j];
+    ll ans = 0;
+    vvl vis(n,vl(m));
+    For(n) Forj(m) ans += cnt(grid,i,j,k,vis);
+    cout<<ans;nl
 }
 
 int main(){

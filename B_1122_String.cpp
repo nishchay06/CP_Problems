@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -48,8 +48,8 @@ using iset = tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node
 #define done     return;
 #define nl       cout << "\n";
 #define endl     "\n";
-#define ya       cout << "YES\n";
-#define na       cout << "NO\n";
+#define ya       cout << "Yes\n";
+#define na       cout << "No\n";
 #define prs(n)   fixed << setprecision(n)
 #define dbg(x)   cout << #x << " = " << x << endl;
 #define inpt(v)  For(sz(v)) cin >> v[i];
@@ -77,25 +77,24 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    str s;
+    cin >> s;
+    int n = size(s);
+    bool ok = (n%2 == 0);
+    if(!ok) {
+        na
+        return;
+    }
+    unordered_set<char> present;
+    for(int i = 0; i < n; i += 2) {
+        if(present.find(s[i]) != present.end() || s[i] != s[i+1]) {
+            na
+            return;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        present.insert(s[i]);
+    } 
+    ya
 }
 
 int main(){

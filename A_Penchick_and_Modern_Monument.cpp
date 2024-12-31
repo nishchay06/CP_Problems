@@ -1,4 +1,3 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
 using namespace std;
  
@@ -77,32 +76,29 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
     ll n;
     cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    vl h(n);
+    inpt(h);
+    ll mx = 1;
+    ll cr = 1;
+    For1(n) {
+        if(h[i] == h[i-1]) cr++;
+        else {
+            mx = max(mx,cr);
+            cr = 1;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    mx = max(mx,cr);
+    cout<<n-mx<<endl;
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

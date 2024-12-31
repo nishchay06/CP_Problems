@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,48 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n,k;
+    cin >> n >> k;
+    vl a(n);
+    inpt(a);
+    ll sm = 0;
+    vl b;
+    For(n) {
+        if(a[i]%k == 0) sm += (a[i]/k);
+        else b.pus(a[i]);
+    }
+    ll poscnt = 0, negcnt = 0;
+    ll possm = 0, negsm = 0;
+    sm *= -1;
+    // cout<<sm<<endl;
+    // prt(b);
+    For(sz(b)) {
+        if(b[i] > 0) {
+            poscnt += 1;
+            possm += (b[i]/k);
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        else {
+            negcnt += 1;
+            negsm += (b[i]/k);
+        }
+    }
+    ll posmax = possm + poscnt;
+    ll posmin = possm;
+    ll negmax = negsm;
+    ll negmin = negsm-negcnt;
+    ll aa = min(posmin,posmax)+min(negmin,negmax);
+    ll bb = max(posmin,posmax)+max(negmin,negmax);
+    // cout<<negmin<<" , "<<negmax<<" , "<<posmin<<" , "<<posmax;nl
+    if(sm >= aa && sm <= bb) ya
+    else na
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

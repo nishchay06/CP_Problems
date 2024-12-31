@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
-#include<bits/stdc++.h>
+// #include<bits/stdc++.h>
+#include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,71 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
+
+class UF {
+    public:
+    int n;
+    vl par, fullpop;
+    UF(int n) {
+        this->n = n;
+        par.assign(n);
+        fullpop.assign(n,1);
+        For(n) par[i] = i;
+
+    }
+};
+
+
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n,m,q;
+    cin >> n >> m >> q;
+    vl pop(n+1);
+    For1(n+1) cin >> pop[i];
+    vvl roads;
+    vl good(m+1,1);
+    For1(m+1) {
+        ll u,v;
+        cin >> u >> v;
+        // ith road is u - v
+        roads.pus({u,v});
+    }
+    vvl queries;
+    For(q) {
+        char ch;
+        cin >> ch;
+        if(ch == 'P') {
+            ll ind, npop;
+            cin >> ind >> npop;
+            queries.pus({0,ind,pop});
+            pop[ind] = npop;
+        } else {
+            ll ind;
+            cin >> ind;
+            queries.pus({1,ind});
+            good[ind] = 0;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    UF uf(n+1);
+    For1(n+1) {
+        if(good[i]) {
+            uf.merge(edges[i][0],edges[i][1]);
+        }
+    }
+    rev(queries);
+    for(auto& it : queries) {
+        if(it[0]) {
+            // change pop
+        } else {
+            // new road 
+        }
+    }
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

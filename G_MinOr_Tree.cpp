@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
-#include<bits/stdc++.h>
+// #include<bits/stdc++.h>
+#include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,61 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
-void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
-        }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+ll cnt;
+void dfs(ll cr, vector<vvl>& adjl, vl& vis, ll i) {
+    vis[cr] = 1;
+    cnt++;
+    for(auto& it : adjl[cr]) {
+        if(!vis[it[0]]) dfs(it[0],adjl,vis,i);
+    }
 }
+
+void solve(){
+    ll n,m;
+    cin >> n >> m;
+    vector<vvl> adjl(n+1);
+    For(m) {
+        ll u,v,w;
+        cin >> u >> v >> w;
+    } 
+    ll ans = (1 << 30)-1;
+    vl vis(n+1);
+    vector<vvl> temp(n+1); 
+    ForR(30) {
+        Forl(j,1,n+1) {
+            temp[j].clear();
+            for(auto& it : adjl[j]) {
+                if(((it[1] >> i) & 1) == 0) {
+                    temp[j].pus(it);
+                }
+            }
+        }
+        ans -= (1 << i);
+        vis.clear();
+        cnt = 0;
+        dfs(1,temp,vis,i);
+        if(cnt < n) {
+            ans += (1 << i);
+        }
+        if(((ans >> i) & 1) == 0) {
+            adjl = temp;
+        }
+    }
+    cout << ans << endl;
+}
+
+/*
+     1
+  1 --- 2
+   2\  /2
+     3
+*/ 
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

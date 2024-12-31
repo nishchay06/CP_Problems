@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,25 +77,31 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n,m;
+    cin >> n >> m;
+    vector<vvl> adjl(n,vvl());
+    For(m) {
+        ll u,v,w;
+        cin >> u >> v >> w;
+        u--, v--;
+        adjl[u].pus({v,w});
+    }
+    vl dist(n,INF);
+    priority_queue<vl> q;
+    q.push({0,0});
+    while(sz(q)) {
+        auto cr = q.top();
+        q.pop();
+        ll crdist = -cr[0], crcity = cr[1];
+        if(dist[crcity] <= crdist) continue;
+        dist[crcity] = crdist;
+        for(auto& it : adjl[crcity]) {
+            ll nxtcity = it[0], nxtdist = it[1];
+            q.push({-crdist-nxtdist,nxtcity});
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    prt(dist);
 }
 
 int main(){

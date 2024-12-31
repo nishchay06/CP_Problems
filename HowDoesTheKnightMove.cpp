@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
-#include<bits/stdc++.h>
+// #include<bits/stdc++.h>
+#include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,25 +77,48 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
+int mx = 8;
 void solve(){
+    cout<<"There is a "<<mx<<"x"<<mx<<" grid. The knight is on any square A1-H8. This will show the number of moves to move to that square of grid.\n";
+    string cr;
+    cout<<"Enter the current square (A1-H8) : ";
+    cin >> cr;
+    cout<<endl;
+    if(!isalpha(cr[0]) || !isnumber(cr[1])) {
+        cout<<cr<<" is an invalid square!!!\n";
+    }
+    int x = mx-(cr[1]-'0');
+    int y = tolower(cr[0])-'a';
+    if(!(0 <= y && y < mx && 0 <= x && x < mx)) {
+        cout<<cr<<" is an invalid square!!!\n";
+    }
+    cout<<cr<<" is an valid square!!!\n\n";
+    int dp[mx][mx];
     memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    queue<vector<int>> q;
+    q.push({x,y,0});
+    while(!q.empty()) {
+        int s = q.size();
+        auto current = q.front();
+        q.pop();
+        int crx = current[0], cry = current[1], num = current[2];
+        if(min(crx,cry) < 0 || max(crx,cry) >= mx || dp[crx][cry] != -1) continue;
+        dp[crx][cry] = num;
+        q.push({crx+1,cry+2,num+1}); 
+        q.push({crx+1,cry-2,num+1}); 
+        q.push({crx-1,cry+2,num+1}); 
+        q.push({crx-1,cry-2,num+1}); 
+        q.push({crx+2,cry+1,num+1}); 
+        q.push({crx+2,cry-1,num+1}); 
+        q.push({crx-2,cry+1,num+1}); 
+        q.push({crx-2,cry-1,num+1}); 
+    }
+    for(int i = 0; i < mx; i++) {
+        for(int j = 0; j < mx; j++) {
+            cout<<dp[i][j]<<" ";
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        cout<<endl;
+    }
 }
 
 int main(){

@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,25 +77,48 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+    ll n,m;
+    cin >> n >> m;
+    vvl adjl(n,vl());
+    For(m) {
+        ll x,y;
+        cin >> x >> y;
+        x--, y--;
+        adjl[x].pus(y);
+        adjl[y].pus(x);
+    }
+    vl dist(n,INF), par(n,-1);
+    ll a = 0, b = n-1;
+    dist[a] = 0;
+    priority_queue<vl> q;
+    q.push({0,a});
+    while(sz(q)) {
+        auto cr = q.top();
+        q.pop();
+        ll num = -cr[0], curr = cr[1];
+        for(auto& nxt : adjl[curr]) {
+            ll crdist = num+1;
+            if(crdist < dist[nxt]) {
+                par[nxt] = curr;
+                dist[nxt] = crdist;
+                q.push({-crdist,nxt});
             }
-            dp[num] = ans;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    if(dist[b] == INF) {
+        cout<<"IMPOSSIBLE\n";
+    } else {
+        vl path;
+        path.pus(b+1);
+        while(par[b] != -1) {
+            path.pus(par[b]+1);
+            b = par[b];
+        }
+        rev(path);
+        cout<<sz(path);nl
+        prt(path);
+    }
 }
 
 int main(){

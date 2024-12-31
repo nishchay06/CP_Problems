@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,26 +77,57 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
+    ll n,m;
+    cin >> n >> m;
+    vl a(n);
+    inpt(a);
+
+    vvl dp(n,vl(105,-1));
+    // vl cr;
+    auto f = [&](auto self, ll i, ll pr = -1) -> ll {
+        if(i == n) {
+            // prt(cr);
+            return 1;
+        }
+        if(i != 0 && a[i] != 0 && abs(a[i]-pr) > 1) return 0;
+        if(dp[i][pr+1] != -1) return dp[i][pr+1];
+        ll ans = 0;
+        if(a[i] == 0) {
+            ll mn = pr-1, mx = pr+1;
+            if(pr == -1) {
+                mn = 1;
+                mx = m;
+            }
+            mn = max(mn,1LL);
+            mx = min(mx,m);
+            for(ll val = mn; val <= mx; val++) {
+                // cr.push_back(val);
+                ans += self(self,i+1,val);
+                // cr.pop_back();
                 ans %= M;
             }
-            dp[num] = ans;
+        } else {
+            // cr.push_back(a[i]);
+            ans += self(self,i+1,a[i]);
+            // cr.pop_back();
+            ans %= M;
         }
-        return dp[num];
+        return dp[i][pr+1] = ans;
     };
-    cout << f(f,n); nl
+   
+    cout<<f(f,0);
 }
+/*
+
+X 2 X 2 X X X 4 5 X X
+
+-1 1 2 
+2 1 2
+2 4 4
+5 2 -1
+
+*/ 
 
 int main(){
     ios_base::sync_with_stdio(0);
@@ -108,3 +139,104 @@ int main(){
     }
     return 0;
 }
+/*
+1 1 1
+1 1 2
+1 2 1
+1 2 2
+1 2 3
+2 1 1
+2 1 2
+2 2 1
+2 2 2
+2 2 3
+2 3 2
+2 3 3
+2 3 4
+3 2 1
+3 2 2
+3 2 3
+3 3 2
+3 3 3
+3 3 4
+3 4 3
+3 4 4
+4 3 2
+4 3 3
+4 3 4
+4 4 3
+4 4 4
+
+
+1 1 1 1
+1 1 1 2
+1 1 2 1
+1 1 2 2
+1 1 2 3
+1 2 1 1
+1 2 1 2
+1 2 2 1
+1 2 2 2
+1 2 2 3
+1 2 3 2
+1 2 3 3
+1 2 3 4
+2 1 1 1
+2 1 1 2
+2 1 2 1
+2 1 2 2
+2 1 2 3
+2 2 1 1
+2 2 1 2
+2 2 2 1
+2 2 2 2
+2 2 2 3
+2 2 3 2
+2 2 3 3
+2 2 3 4
+2 3 2 1
+2 3 2 2
+2 3 2 3
+2 3 3 2
+2 3 3 3
+2 3 3 4
+2 3 4 3
+2 3 4 4
+3 2 1 1
+3 2 1 2
+3 2 2 1
+3 2 2 2
+3 2 2 3
+3 2 3 2
+3 2 3 3
+3 2 3 4
+3 3 2 1
+3 3 2 2
+3 3 2 3
+3 3 3 2
+3 3 3 3
+3 3 3 4
+3 3 4 3
+3 3 4 4
+3 4 3 2
+3 4 3 3
+3 4 3 4
+3 4 4 3
+3 4 4 4
+4 3 2 1
+4 3 2 2
+4 3 2 3
+4 3 3 2
+4 3 3 3
+4 3 3 4
+4 3 4 3
+4 3 4 4
+4 4 3 2
+4 4 3 3
+4 4 3 4
+4 4 4 3
+4 4 4 4
+2
+3
+4
+*/ 

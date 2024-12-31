@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,25 +77,48 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n,m,q;
+    cin >> n >> m >> q;
+    vl a(n), b(m);
+    inpt(a);
+    inpt(b);
+    ll Sa = Vsum(a), Sb = Vsum(b);
+    unordered_set<ll> aa, bb;
+    For(n) aa.in(Sa-a[i]);
+    For(m) bb.in(Sb-b[i]);
+    
+    For(q) {
+        ll val;
+        cin >> val;
+        bool ok = 0;
+        // x = S + i*j - i*Sb - j*Sa
+        // for i = I, j = J
+        // x = Sa*Sb + I*J - I*Sb - J*Sa
+        // x = (Sa-a)*(Sb-b)
+        vl factors;
+        ll i = 1;
+        for(; i*i < val; i++) {
+            if(val%i == 0)  factors.pus(i);
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        if(i-val/i == 1) i--;
+        for(; i > 0; i--) {
+            if(val%i == 0)  factors.pus(val/i);
+        }
+        for(auto& f : factors) {
+            if((aa.find(f) != aa.end() && bb.find(val/f) != bb.end()) || (bb.find(f) != bb.end() && aa.find(val/f) != aa.end())) {
+                ok = 1;
+            }
+            if(ok) break;
+            f *= -1;
+            if((aa.find(f) != aa.end() && bb.find(val/f) != bb.end()) || (bb.find(f) != bb.end() && aa.find(val/f) != aa.end())) {
+                ok = 1;
+            }
+            if(ok) break;
+        }
+        if(ok) ya
+        else na
+    }
 }
 
 int main(){

@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,25 +77,33 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+    ll n,m,q;
+    cin >> n >> m >> q;
+    vvl dist(n,vl(n,INF));
+    For(m) {
+        ll u,v,w;
+        cin >> u >> v >> w;
+        u--, v--;
+        dist[u][v] = min(dist[u][v],w);
+        dist[v][u] = min(dist[v][u],w);
+    }
+    For(n) dist[i][i] = 0;
+    Forl(k,0,n) {
+        Forl(i,0,n) {
+            Forl(j,0,n) {
+                dist[i][j] = min(dist[i][j],dist[i][k]+dist[k][j]);
             }
-            dp[num] = ans;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    For(q) {
+        ll u,v;
+        cin >> u >> v;
+        u--, v--;
+        if(dist[u][v] == INF) cout<<-1;
+        else cout<<dist[u][v];
+        nl
+    }
 }
 
 int main(){

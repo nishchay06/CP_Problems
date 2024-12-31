@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -53,7 +53,7 @@ using iset = tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node
 #define prs(n)   fixed << setprecision(n)
 #define dbg(x)   cout << #x << " = " << x << endl;
 #define inpt(v)  For(sz(v)) cin >> v[i];
-#define prt(v)  {for(auto &x:v) cout << x << ' '; nl}
+#define prt(v)  {for(auto &x:v) cout << x; nl}
  
 const int M = 1e9+7;
 // const int M = 998244353;
@@ -77,32 +77,33 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n,m,k;
+    cin >> n >> m >> k;
+    vl a(m);
+    inpt(a);
+    vl q(k);
+    inpt(q);
+    str s;
+    if(n-2 >= k) s = str(m,'0');
+    else if(n == k) s = str(m,'1');
+    else {
+        sll st;
+        For1(n+1) st.in(i);
+        For(k) st.erase(q[i]);
+        For(m) {
+            if(a[i] == *st.begin()) s += '1';
+            else s += '0';
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    prt(s);
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -67,7 +67,6 @@ vl divsr(ll n) {vl a(n+1,1); For(n+1) a[i]=i; Forl(i,2,n+1) if(a[i]==i) {for(ll 
 vl fac(ll n) {vl v(n+1,1); Forl(i,2,n+1) v[i] = (v[i-1]*i)%M; return v;}
 ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
  
- 
 /* stuff you should look for 
     * check for int overflow
     * check for time complexity (make sure not to TLE)
@@ -77,32 +76,40 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
     ll n;
     cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    map<ll,ll> bad;
+    vpl q;
+    For(n) {
+        ll l,r;
+        cin >> l >> r;
+        if(l == r) {
+            bad[l]++;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        q.pus({l,r});
+    }
+    vl cnt(2*n+1);
+    For1(2*n+1) {
+        cnt[i] = cnt[i-1]+(bad.find(i) == bad.end());
+    }
+    string ans = string(n,'1');
+    For(n) {
+        ll l = q[i].ff, r = q[i].ss;
+        if(l == r) {
+            if(bad[l] > 1) ans[i] = '0';
+        } else {
+            if(cnt[r]-cnt[l-1] == 0) ans[i] = '0'; 
+        }
+    }
+    cout<<ans;nl
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

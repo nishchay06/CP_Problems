@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,69 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
-void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+
+str minForm(str s) {
+    str ans = "";
+    ll n = sz(s);
+    ll i = 0;
+    // cout<<s<<endl;
+    while(i < n) {
+        ans += s[i];
+        ll cnta = 0, cntb = 0;
+        int j = i+1;
+        if(j == n) break;
+        while(j < n && s[j] == s[i]) {
+            cnta++;
+            j++;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        while(j < n && s[j] != s[i]) {
+            j++;
+            cntb++;
+        }
+        cntb -= 1;
+        j -= 1;
+        // cout<<i<<" -> "<<j<<endl;
+        if(cntb < 0 || cnta < 0) {
+            // cout<<s.substr(i+1,j-i-1)<<endl;
+            ans += s.substr(i+1,j-i-1);
+        } else {
+            // cout<<cnta<<" & "<<cntb<<endl;
+            if(cnta&1) ans += s[i];
+            if(cntb&1) ans += s[j];
+        }
+        // cout<<"here->"<<ans<<endl;
+        i = j;
+    }
+    return ans;
+}
+
+void solve(){
+    ll n,m; cin >> n >> m;
+    str s, t;
+    cin >> s;
+    cin >> t;
+    if(m > n) {
+        na
+        done
+    }
+    if((n-m)&1) {
+        na
+        done
+    }
+    // n >= m && n-m is even
+    str ss = minForm(s);
+    str tt = minForm(t);
+    // cout<<s<<" -> "<<ss;nl
+    // cout<<t<<" -> "<<tt;nl
+    if(ss == tt) ya
+    else na
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

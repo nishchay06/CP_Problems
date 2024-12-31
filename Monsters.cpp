@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -59,7 +59,7 @@ const int M = 1e9+7;
 // const int M = 998244353;
 const int N = 2e5+5;
 const ld pi = 3.141592653589793238;
-const ll INF = 2e18;
+const ll INF = 1e18;
  
 ll power(ll a,ll b){ll r=1; while(b) {if(b&1) r=(r*a)%M; a=(a*a)%M; b/=2;} return r;}
 vl sieve(ll n) {vl a(n+1,1),v; a[0]=a[1]=0; Forl(i,2,n+1) if(a[i]) {v.pus(i); for(ll j=i*i; j <=n; j+=i) a[j]=0;} return a;}
@@ -77,27 +77,92 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+    ll n,m;
+    vs grid;
+    cin >> n >> m;
+    For(n) {
+        str s;
+        cin >> s;
+        grid.pus(s);
+    }
+    vvl lab(n,vl(m,INF));
+    vvl labm(n,vl(m,INF));
+    queue<vl> q, monsters;
+    For(n) {
+        Forj(m) {
+            if(grid[i][j] == 'M') {
+                monsters.push({0,i,j});
             }
-            dp[num] = ans;
+            if(grid[i][j] == 'A') {
+                q.push({0,i,j});
+            }
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    
+    while(sz(q)) {
+        auto cr = q.front();
+        q.pop();
+        ll crdist = -cr[0], crx = cr[1], cry = cr[2];
+        if(lab[crx][cry] <= crdist) continue;
+        lab[crx][cry] = crdist;
+        ll ndist = crdist+1;
+        if(crx+1 < n && grid[crx+1][cry] != '#' && ndist < lab[crx+1][cry]) q.push({-ndist,crx+1,cry});
+        if(crx-1 >= 0 && grid[crx-1][cry] != '#' && ndist < lab[crx-1][cry]) q.push({-ndist,crx-1,cry});
+        if(cry+1 < m && grid[crx][cry+1] != '#' && ndist < lab[crx][cry+1]) q.push({-ndist,crx,cry+1});
+        if(cry-1 >= 0 && grid[crx][cry-1] != '#' && ndist < lab[crx][cry-1]) q.push({-ndist,crx,cry-1});
+    }
+    
+    while(sz(monsters)) {
+        auto cr = monsters.front();
+        monsters.pop();
+        ll crdist = -cr[0], crx = cr[1], cry = cr[2];
+        if(labm[crx][cry] <= crdist) continue;
+        labm[crx][cry] = crdist;
+        ll ndist = crdist+1;
+        if(crx+1 < n && grid[crx+1][cry] != '#' && ndist < labm[crx+1][cry]) monsters.push({-ndist,crx+1,cry});
+        if(crx-1 >= 0 && grid[crx-1][cry] != '#' && ndist < labm[crx-1][cry]) monsters.push({-ndist,crx-1,cry});
+        if(cry+1 < m && grid[crx][cry+1] != '#' && ndist < labm[crx][cry+1]) monsters.push({-ndist,crx,cry+1});
+        if(cry-1 >= 0 && grid[crx][cry-1] != '#' && ndist < labm[crx][cry-1]) monsters.push({-ndist,crx,cry-1});
+    }
+ 
+    bool found = 0;
+    ll lx = -1, ly = -1, st = -1;
+    For(n) {
+        Forj(m) {
+            if(labm[i][j] <= lab[i][j]) lab[i][j] = INF;
+            if((i == 0 || i == n-1 || j == 0 || j == m-1) && (lab[i][j] != INF)) {
+                found = 1;
+                lx = i, ly = j;
+            }
+            if(found) break;
+        }
+    }
+    if(found) {
+        ya
+        cout<<lab[lx][ly];nl
+        str ans = "";
+        while(lab[lx][ly] != 0) {
+            if(lx-1 >= 0 && lab[lx-1][ly] == lab[lx][ly]-1) {
+                ans += 'D';
+                lx = lx-1;
+            } else if(lx+1 < n && lab[lx+1][ly] == lab[lx][ly]-1) {
+                ans += 'U';
+                lx = lx+1;
+            } else if(ly-1 >= 0 && lab[lx][ly-1] == lab[lx][ly]-1) {
+                ans += 'R';
+                ly = ly-1;
+            } else if(ly+1 < m && lab[lx][ly+1] == lab[lx][ly]-1) {
+                ans += 'L';
+                ly = ly+1;
+            }
+        }
+        rev(ans);
+        cout<<ans;
+        nl
+    } else na
 }
-
+ 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
@@ -108,3 +173,4 @@ int main(){
     }
     return 0;
 }
+

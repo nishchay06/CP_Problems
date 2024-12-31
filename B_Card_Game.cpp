@@ -1,4 +1,3 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
 using namespace std;
  
@@ -67,42 +66,45 @@ vl divsr(ll n) {vl a(n+1,1); For(n+1) a[i]=i; Forl(i,2,n+1) if(a[i]==i) {for(ll 
 vl fac(ll n) {vl v(n+1,1); Forl(i,2,n+1) v[i] = (v[i-1]*i)%M; return v;}
 ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
  
- 
 /* stuff you should look for 
     * check for int overflow
     * check for time complexity (make sure not to TLE)
     * special case (n = 1)
     * make sure to initialize everything (array)
-    * don't be lazy, write out your thought and code it out
+    * don't be lazy, write out your thoughts and code it out
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
-void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
-        }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+int f(int a, int b) {
+    if(a > b) return 1;
+    if(a == b) return 0;
+    return  -1;
 }
+
+void solve(){
+    ll a1,a2,b1,b2;
+    cin >> a1 >> a2 >> b1 >> b2;
+    int ans = 0;
+    if (f(a1, b1) + f(a2, b2) > 0) {
+        ans += 2;
+    }
+    if (f(a1, b2) + f(a2, b1) > 0) {
+        ans += 2;
+    }
+    cout << ans << endl;
+}
+
+/*
+1 0
+2 0
+2 1
+*/ 
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

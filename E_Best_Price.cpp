@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,32 +77,49 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n,k;
+    cin >> n >> k;
+    vl a(n), b(n);
+    inpt(a);
+    inpt(b);
+    map<ll,ll> mpbad, mpgood;
+    mpgood[0] = 0;
+    ll ans = 0;
+    For(n) {
+        mpbad[a[i]+1]++;
+        mpbad[b[i]+1]--;
+        mpgood[1]++;
+        mpgood[a[i]+1]--;
+    }
+    ll add = 0;
+    for(auto& [val,f] : mpgood) {
+        f += add;
+        add = f;
+    }
+    
+    ll prevfreq = 0;
+    for(auto& [cst,badfreq] : mpbad) {
+        badfreq += prevfreq;
+        if(prevfreq <= k) {
+            // prevgoodfreq = goodrev at cst-1
+            ll prevgoodfreq = 0;
+            auto it = mpgood.upper_bound(cst-1);
+            it--;
+            prevgoodfreq = it->ss;
+            ll cr = (cst-1)*(prevfreq+prevgoodfreq);
+            ans = max(ans,cr);
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+        prevfreq = badfreq;
+    }
+    cout<<ans;nl
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

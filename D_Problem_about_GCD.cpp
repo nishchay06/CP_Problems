@@ -1,4 +1,3 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
 using namespace std;
  
@@ -77,32 +76,39 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+    ll l,r,g;
+    cin >> l >> r >> g;
+    ll mn = l/g, mx = r/g;
+    if(l%g != 0) mn++;
+    if(mn > mx) {
+        cout<<"-1 -1";
+        nl;done
+    }
+    ll ans = -1, L = -1, R = -1;
+    for(ll y = mx; y >= mn && y >= mx-100; y--) {
+        for(ll x = mn; x <= y && x <= mn+100; x++) {
+            if(gcd(x,y) == 1) {
+                if(y-x > ans || (y-x == ans && x < ( (L != -1) ? (L/g) : INF))) {
+                    ans = y-x;
+                    L = x*g;
+                    R = y*g;
+                }
+                break;
             }
-            dp[num] = ans;
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    if(ans != -1) {
+        cout<<L<<" "<<R;
+    } else cout<<"-1 -1";
+    nl
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

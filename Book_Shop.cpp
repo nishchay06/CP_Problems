@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
-#include<bits/stdc++.h>
+// #include<bits/stdc++.h>
+#include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -77,27 +77,21 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n,m;
+    cin >> n >> m;
+    vl c(n), p(n);
+    inpt(c);
+    inpt(p);
+    vl dp(m+1);
+    ForR(n) {
+        for(ll j = m; j >= c[i]; j--) {
+            dp[j] = max(dp[j],p[i]+dp[j-c[i]]);
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    cout<<dp[m];
 }
-
+ 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);

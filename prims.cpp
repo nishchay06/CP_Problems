@@ -1,4 +1,5 @@
-#include<bits/stdc++.h>
+// #include<bits/stdc++.h>
+#include </Users/nishchay/Desktop/abc.h>
 using namespace std;
 
 void solve() {
@@ -32,9 +33,7 @@ void solve() {
 
         for(auto& it : adjl[crnode]) {
             int nxtnode = it.first, edgewt = it.second;
-            if(!vis[nxtnode]) {
-                q.push({edgewt,nxtnode,crnode});
-            }
+            q.push({edgewt,nxtnode,crnode});
         }
     }
 

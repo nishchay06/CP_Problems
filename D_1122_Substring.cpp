@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
-#include<bits/stdc++.h>
+// #include<bits/stdc++.h>
+#include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -48,8 +48,8 @@ using iset = tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node
 #define done     return;
 #define nl       cout << "\n";
 #define endl     "\n";
-#define ya       cout << "YES\n";
-#define na       cout << "NO\n";
+#define ya       cout << "Yes\n";
+#define na       cout << "No\n";
 #define prs(n)   fixed << setprecision(n)
 #define dbg(x)   cout << #x << " = " << x << endl;
 #define inpt(v)  For(sz(v)) cin >> v[i];
@@ -77,25 +77,47 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
+    ll n; cin >> n;
+    vl a(n);
+    inpt(a);
+    // vvl b;
+    bool nll = 1;
+    ll ans = 0;
+    unordered_map<ll,ll> mp;
+    for(int i = 0; i < n-1; i++) {
+        if(a[i] == a[i+1]) {
+            if(nll) {
+                // b.pus({a[i]});
+                mp[a[i]] = i;
+                nll = 0;
             }
-            dp[num] = ans;
+            else {
+                // b.back().pus(a[i]);
+                ans = max(ans,i-mp[a[i]]);
+                mp[a[i]] = i;
+            }
+            i++;
+        } else {
+            mp.clear();
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    cout<<2*ans;nl
+    // for(auto& nums : b) {
+    //     int m = sz(nums);
+    //     unordered_map<int,int> mp;
+    //     ll cr = 0;
+    //     for(ll i = 0, j = 0; i < m; i++) {
+    //         mp[nums[i]]++;
+    //         while(j <= i && sz(mp) < i-j+1) {
+    //             --mp[nums[j]];
+    //             if(mp[nums[j]] == 0) mp.erase(nums[j]);
+    //             j++;
+    //         }
+    //         cr = max(cr,i-j+1);
+    //     }
+    //     ans = max(ans,cr);
+    // }
 }
 
 int main(){

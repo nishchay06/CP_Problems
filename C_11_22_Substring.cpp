@@ -1,5 +1,5 @@
-// #include </Users/nishchay/Desktop/abc.h>
 #include<bits/stdc++.h>
+// #include </Users/nishchay/Desktop/abc.h>
 using namespace std;
  
 using str =  string;
@@ -48,8 +48,8 @@ using iset = tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node
 #define done     return;
 #define nl       cout << "\n";
 #define endl     "\n";
-#define ya       cout << "YES\n";
-#define na       cout << "NO\n";
+#define ya       cout << "Yes\n";
+#define na       cout << "No\n";
 #define prs(n)   fixed << setprecision(n)
 #define dbg(x)   cout << #x << " = " << x << endl;
 #define inpt(v)  For(sz(v)) cin >> v[i];
@@ -77,25 +77,24 @@ ll gcd(ll a, ll b){if(b == 0){return a;}return gcd(b,a%b);}
 */
  
 //-------------------------------------------------------------------------------------------------------------------------------------
-ll dp[1000001];
 void solve(){
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    auto f = [&](auto self, ll num) -> ll {
-        if(num <= 1) return 1;
-        if(dp[num] == -1) {
-            ll ans = 0;
-            For1(7) {
-                if(num < i) break;
-                ans += self(self,num-i);
-                ans %= M;
-            }
-            dp[num] = ans;
+    ll n; cin >> n;
+    str s;
+    cin >> s;
+    ll ans = 0;
+    queue<int> q;
+    For(n) if(s[i] == '/') q.push(i);
+    while(sz(q)) {
+        ll i = q.front();
+        q.pop();
+        for(ll j = 1; j < 1e5; j++) {
+            int l = i-j, r = i+j;
+            if(l < 0 || r >= n) break;
+            if(s[l] != '1' || s[r] != '2') break;
+            ans = max(ans,j);
         }
-        return dp[num];
-    };
-    cout << f(f,n); nl
+    }
+    cout<<2*ans+1;nl
 }
 
 int main(){
